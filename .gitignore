@@ -11,6 +11,16 @@
 *.cb
 *.cb2
 
+## ignore the generated PDF
+/*.pdf
+
+## Generated from the Makefile
+*.make
+*.make.temp
+*.d
+*.cookie
+
+
 ## Intermediate documents:
 *.dvi
 *-converted-to.*

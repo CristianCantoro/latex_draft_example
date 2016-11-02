@@ -1,0 +1,45 @@
+%!TEX root =../paper.tex
+
+\usepackage[english]{babel}
+\usepackage{blindtext}
+
+\usepackage[dirty=DirtyRepo]{gitinfo2}
+\usepackage[yyyymmdd,hhmmss]{datetime}
+\renewcommand{\dateseparator}{--}
+
+% Add DRAFT command
+% \newcommand{\draft}[1]{
+%   \definecolor{textcolor}{HTML}{E00116}
+%   \newcommand{\drafttext}{DRAFT (v. #1) ~\today ~\currenttime}
+%   \usepackage{background}
+%   \backgroundsetup{contents=\drafttext,
+%            color=textcolor,
+%            opacity=1,
+%            angle=90,
+%            position=current page.center,
+%            vshift=-8,
+%            hshift=150,
+%            scale=3
+%            }
+% }
+\newcommand{\rotatedhookrightarrow}{{\mathpalette\rothookrightarrow\relax}}
+\newcommand{\rothookrightarrow}[2]{\rotatebox[origin=c]{45}{$#1\hookrightarrow$}}
+\newcommand{\Scale}[2][4]{\scalebox{#1}{\ensuremath{#2}}}
+
+\newcommand{\draft}{
+  \newcommand{\gitBranchSymbol}{$\Scale[1.25]{\rotatedhookrightarrow}$}
+  \newcommand{\gitIfIsDirtyRepoSymbol}{\IfSubStr{\gitDirty}{DirtyRepo}{\gitBranchSymbol}{}}
+
+  \definecolor{textcolor}{HTML}{E00116}
+  \newcommand{\drafttext}{DRAFT (v. \gitIfIsDirtyRepoSymbol\gitAbbrevHash, ~\gitCommitterDate) ~\today ~\currenttime}
+  \usepackage{background}
+  \backgroundsetup{contents=\drafttext,
+           color=textcolor,
+           opacity=1,
+           angle=90,
+           position=current page.center,
+           vshift=-10,
+           hshift=200,
+           scale=2
+           }
+}
