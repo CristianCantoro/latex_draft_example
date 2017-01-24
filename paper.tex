@@ -1,15 +1,46 @@
 %!TEX root = paper.tex
 
+% this is the template for papers from the SIGMOD
+% conference. Just an example.
 \documentclass{imports/sig-alternate}
 
 % Packages
-\input{imports/macros.tex}
 
-% This is a custom command (defined in macros.tex above)
+% these two packages are needed just to make this
+% example work, you do not need to add them to your
+% source
+%
+% Add the \Heart symbol
+\usepackage{marvosym}
+% Needed for dysplaying URLs
+\usepackage{hyperref}
+% Generates random text
+\usepackage{blindtext}
+
+% this contains the definition of the commands that
+% you need to display the draft watermark/stamp.
+% Copy the source file in your project and add this line.
+\input{imports/draft.tex}
+
+% This is the custom command (defined in draft.tex above)
 % that adds a draft stamp on the PDF.
 \draft
 
 \begin{document}
+
+\title{Git + LaTeX + gitinfo = {\Huge \Heart}}
+\subtitle{How to add a ``draft'' annotation to your papers. \\
+More at \href{https://balist.es/blog/2016/11/02/git-latex-gitinfo-draft-watermark/}{my blog}.}
+
+\maketitle
+
+\begin{abstract}
+
+Foobar.
+
+\end{abstract}
+
+\section{This Is A Random Example}
 
 \blindmathpaper
 
