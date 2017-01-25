@@ -1065,14 +1065,6 @@ $(error $(C_ERROR)Clean and build targets specified together$(C_RESET)))
 endif
 endif
 
-isgitrepo		:= $(git rev-parse --is-inside-work-tree 2>/dev/null && echo 'true')
-hasgitinfohooks	:= $(grep -ri gitinfo ./.git/ -l | grep -q 'hooks' 2>/dev/null && 'true')
-ifeq "$(isgitrepo)" "true"
-ifeq "$(hasgitinfohooks)" "true"
-$(grep -ri gitinfo ./.git/ -l | grep -m 1 'hooks')
-endif
-endif
-
 #
 # VARIABLE DECLARATIONS
 #
@@ -2526,7 +2518,7 @@ echo-list	= for x in $1; do $(ECHO) "$$x"; done
 #
 
 .PHONY: all
-all: $(default_pdf_targets) ;
+all: pre-build $(default_pdf_targets) ;
 
 .PHONY: all-pdf
 all-pdf: $(default_pdf_targets) ;
@@ -2539,6 +2531,14 @@ all-ps: $(default_ps_targets) ;
 all-dvi: $(default_dvi_targets) ;
 endif
 
+isgitrepo		:= $(git rev-parse --is-inside-work-tree 2>/dev/null && echo 'true')
+hasgitinfohooks	:= $(grep -ri gitinfo ./.git/ -l | grep -q 'hooks' 2>/dev/null && 'true')
+
+pre-build:
+	$(QUIET) if [ $isgitrepo -a $hasgitinfohooks ]; then \
+		$(ECHO) -n "--> Launching gitinfo hook"; \
+		$$(grep -ri gitinfo ./.git/ -l | grep -m 1 'hooks') && $(ECHO) "... done!"; \
+	fi
 #
 # VIEWING TARGET
 #
