@@ -7,20 +7,17 @@
 \newcommand{\draft}[1]{
   \global\toggletrue{isDraft}%
 
-  % use dashes as separators for dates (deffault in git, so it is needed
-  % for consistency)
+  % use dashes as separators for dates (default in git, so it is needed for
+  % consistency)
   \usepackage[yyyymmdd,hhmmss]{datetime}
   \renewcommand{\dateseparator}{-}
 
   % define watermark color
   \definecolor{draftwatermarkcolor}{HTML}{E00116}
 
-  % define \gitBranchSymbol and \gitIfIsDirtyRepoSymbol
-
-  % intermediate commands to define \gitBranchSymbol: start from
-  % \hookrightarrow, rotate it 45 degrees and scale it by 1.2 times
-  \newcommand{\rothookrightarrow}{\rotatebox[origin=c]{45}{$\hookrightarrow$}}
-  \newcommand{\rotatedhookrightarrow}{{\mathpalette\rothookrightarrow\relax}}
+  % define \gitBranchSymbol: start from \hookrightarrow, rotate it 45 degrees
+  % and scale it by 1.2 times
+  \newcommand{\rotatedhookrightarrow}{{\mathpalette\rotatebox[origin=c]{45}{$\hookrightarrow$}\relax}}
   \newcommand{\gitBranchSymbol}{$\scalebox{1.2}{\ensuremath{\rotatedhookrightarrow}}$}
 
   % if the repo is dirty we put the symbol otherwise we leave it empty
@@ -31,7 +28,8 @@
   % length 19.
   \StrSplit{\gitCommitterIsoDate}{19}{\gitCommitterDateTime}{}
 
-
+  % if the option "long" is passed then the commit is dispalied with date and
+  % time otherwise only date.
   \newcommand{\gitCommitterDateDisplay}{\IfSubStr{#1}{long}{\gitCommitterDateTime}{\gitCommitterDate}}
 
   % watermark text
