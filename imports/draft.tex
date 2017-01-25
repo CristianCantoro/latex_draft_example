@@ -17,7 +17,7 @@
 
   % define \gitBranchSymbol: start from \hookrightarrow, rotate it 45 degrees
   % and scale it by 1.2 times
-  \newcommand{\rotatedhookrightarrow}{{\mathpalette\rotatebox[origin=c]{45}{$\hookrightarrow$}\relax}}
+  \newcommand{\rotatedhookrightarrow}{\mathpalette{\rotatebox[origin=c]{45}{$\hookrightarrow$}}\relax}
   \newcommand{\gitBranchSymbol}{$\scalebox{1.2}{\ensuremath{\rotatedhookrightarrow}}$}
 
   % if the repo is dirty we put the symbol otherwise we leave it empty
