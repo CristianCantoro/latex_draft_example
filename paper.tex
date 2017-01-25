@@ -6,7 +6,7 @@
 
 % Packages
 
-% these two packages are needed just to make this
+% the following packages are needed just to make this
 % example work, you do not need to add them to your
 % source
 %
@@ -35,7 +35,10 @@
 \title{Git + LaTeX + gitinfo = {\Huge \Heart}}
 \subtitle{How to add a ``draft'' annotation to your papers. \\
 More at \href{https://balist.es/blog/2016/11/02/git-latex-gitinfo-draft-watermark/}{my blog}.}
-\author{Cristian Consonni}
+
+\author{
+	\iftoggle{isDraft}{Cristian Consonni}{Blind submission}
+}
 
 \maketitle
 
