@@ -1,39 +1,45 @@
 %!TEX root =../paper.tex
-
-\usepackage[english]{babel}
-
 \usepackage[dirty=DirtyRepo]{gitinfo2}
-\usepackage[yyyymmdd,hhmmss]{datetime}
-\renewcommand{\dateseparator}{--}
+\usepackage{etoolbox}
 
-% Add DRAFT command
-% \newcommand{\draft}[1]{
-%   \definecolor{textcolor}{HTML}{E00116}
-%   \newcommand{\drafttext}{DRAFT (v. #1) ~\today ~\currenttime}
-%   \usepackage{background}
-%   \backgroundsetup{contents=\drafttext,
-%            color=textcolor,
-%            opacity=1,
-%            angle=90,
-%            position=current page.center,
-%            vshift=-8,
-%            hshift=150,
-%            scale=3
-%            }
-% }
-\newcommand{\rotatedhookrightarrow}{{\mathpalette\rothookrightarrow\relax}}
-\newcommand{\rothookrightarrow}[2]{\rotatebox[origin=c]{45}{$#1\hookrightarrow$}}
-\newcommand{\Scale}[2][4]{\scalebox{#1}{\ensuremath{#2}}}
+\global\newtoggle{isDraft}
 
-\newcommand{\draft}{
-  \newcommand{\gitBranchSymbol}{$\Scale[1.25]{\rotatedhookrightarrow}$}
+\newcommand{\draft}[1]{
+  \global\toggletrue{isDraft}%
+
+  % use dashes as separators for dates (deffault in git, so it is needed
+  % for consistency)
+  \usepackage[yyyymmdd,hhmmss]{datetime}
+  \renewcommand{\dateseparator}{-}
+
+  % define watermark color
+  \definecolor{draftwatermarkcolor}{HTML}{E00116}
+
+  % define \gitBranchSymbol and \gitIfIsDirtyRepoSymbol
+
+  % intermediate commands to define \gitBranchSymbol: start from
+  % \hookrightarrow, rotate it 45 degrees and scale it by 1.2 times
+  \newcommand{\rothookrightarrow}{\rotatebox[origin=c]{45}{$\hookrightarrow$}}
+  \newcommand{\rotatedhookrightarrow}{{\mathpalette\rothookrightarrow\relax}}
+  \newcommand{\gitBranchSymbol}{$\scalebox{1.2}{\ensuremath{\rotatedhookrightarrow}}$}
+
+  % if the repo is dirty we put the symbol otherwise we leave it empty
   \newcommand{\gitIfIsDirtyRepoSymbol}{\IfSubStr{\gitDirty}{DirtyRepo}{\gitBranchSymbol}{}}
 
-  \definecolor{textcolor}{HTML}{E00116}
-  \newcommand{\drafttext}{DRAFT (v. \gitIfIsDirtyRepoSymbol\gitAbbrevHash, ~\gitCommitterDate) ~\today ~\currenttime}
+  % define \gitCommitterDateTime (date and time of last commit) from
+  % \gitCommitterIsoDate: 19 is a magic number: 'yyyy-mm-dd hh:MM:ss' has
+  % length 19.
+  \StrSplit{\gitCommitterIsoDate}{19}{\gitCommitterDateTime}{}
+
+
+  \newcommand{\gitCommitterDateDisplay}{\IfSubStr{#1}{long}{\gitCommitterDateTime}{\gitCommitterDate}}
+
+  % watermark text
+  \newcommand{\drafttext}{DRAFT (v. \gitIfIsDirtyRepoSymbol\gitAbbrevHash, ~\gitCommitterDateDisplay) ~\today ~\currenttime}
+
   \usepackage{background}
   \backgroundsetup{contents=\drafttext,
-           color=textcolor,
+           color=draftwatermarkcolor,
            opacity=1,
            angle=90,
            position=current page.center,
