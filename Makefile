@@ -2537,7 +2537,9 @@ hasgitinfohooks	:= $(grep -ri gitinfo ./.git/ -l | grep -q 'hooks' 2>/dev/null &
 pre-build:
 	$(QUIET) if [ $isgitrepo -a $hasgitinfohooks ]; then \
 		$(ECHO) -n "--> Launching gitinfo hook"; \
-		$$(grep -ri gitinfo ./.git/ -l | grep -m 1 'hooks') && $(ECHO) "... done!"; \
+		$$(cd "$(git rev-parse --show-toplevel)" && \
+			grep -ri gitinfo ./.git/ -l | grep -m 1 'hooks') \
+		&& $(ECHO) "... done!"; \
 	fi
 #
 # VIEWING TARGET
