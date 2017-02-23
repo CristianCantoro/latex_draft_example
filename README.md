@@ -4,6 +4,15 @@ A simple working example to show how to add a "draft" annotation to a paper writ
 
 ## Usage
 
+
+Just do this:
+
+1. put the hooks in the `.git` directory of your repo
+2.  input the file `draft.tex` file in your source, e.g.
+```
+\input{imports/draft.tex}
+```
+
 More info on [my blog](https://balist.es/blog/2017/01/26/git-latex-gitinfo-draft-watermark/).
 
 ### Setup
