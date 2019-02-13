@@ -1,15 +1,32 @@
 %!TEX root =../paper.tex
+
+% Required packages
 \usepackage[dirty=DirtyRepo]{gitinfo2}
 \usepackage{etoolbox}
+\usepackage{keyval}
+\usepackage{xstring}
+\usepackage{background}
+\usepackage[yyyymmdd,hhmmss]{datetime}
 
 \global\newtoggle{isDraft}
 
-\newcommand{\draft}[1]{
+\makeatletter
+% How to create a command with key values?
+% https://tex.stackexchange.com/a/34314/25748
+% ========= KEY DEFINITIONS =========
+\define@key{draft}{vshift}{\def\pb@vshift{#1}}
+\define@key{draft}{hshift}{\def\pb@hshift{#1}}
+\define@key{draft}{scale}{\def\pb@scale{#1}}
+% ========= KEY DEFAULTS =========
+\setkeys{draft}{vshift=-0.5\leftmargin,hshift=0.3\textheight,scale=2}%
+\newcommand{\draft}[2][]{%
   \global\toggletrue{isDraft}%
+
+  % Set new keys
+  \setkeys{draft}{#1}
 
   % use dashes as separators for dates (default in git, so it is needed for
   % consistency)
-  \usepackage[yyyymmdd,hhmmss]{datetime}
   \renewcommand{\dateseparator}{-}
 
   % define watermark color
@@ -17,8 +34,8 @@
 
   % define \gitBranchSymbol: start from \hookrightarrow, rotate it 45 degrees
   % and scale it by 1.2 times
-  \newcommand{\rotatedhookrightarrow}{\mathpalette{\rotatebox[origin=c]{45}{$\hookrightarrow$}}\relax}
-  \newcommand{\gitBranchSymbol}{$\scalebox{1.2}{\ensuremath{\rotatedhookrightarrow}}$}
+  \newcommand{\rotatedhookrightarrow}{\mathpalette{\rotatebox[origin=c]{45}{$\hookrightarrow$}}\relax}%
+  \newcommand{\gitBranchSymbol}{$\scalebox{1.2}{\ensuremath{\rotatedhookrightarrow}}$}%
 
   % if the repo is dirty we put the symbol otherwise we leave it empty
   \newcommand{\gitIfIsDirtyRepoSymbol}{\IfSubStr{\gitDirty}{DirtyRepo}{\gitBranchSymbol}{}}
@@ -30,20 +47,25 @@
 
   % if the option "long" is passed then the commit is dispalied with date and
   % time otherwise only date.
-  \newcommand{\gitCommitterDateDisplay}{\IfSubStr{#1}{long}{\gitCommitterDateTime}{\gitCommitterDate}}
+  \newcommand{\gitCommitterDateDisplay}{\IfSubStr{#2}{long}{\gitCommitterDateTime}{\gitCommitterDate}}
+
+  \newcommand{\gitAuthor}{\StrCut{\gitAuthorName}{ }{\csName}{\csSurname}\csName}
+
+  \usepackage{amssymb}
+  \newcommand{\gitRelInfo}{\IfEq{\gitRoff}{}{$\diamond$-\gitRel}{\gitRel-\gitRoff}}
 
   % watermark text
-  \newcommand{\drafttext}{DRAFT (v. \gitIfIsDirtyRepoSymbol\gitAbbrevHash, ~\gitCommitterDateDisplay) ~\today ~\currenttime}
+  \newcommand{\drafttext}{DRAFT (v. \gitIfIsDirtyRepoSymbol\gitAbbrevHash, \gitAuthor, \gitRelInfo, \gitCommitterDateDisplay) ~\today ~\currenttime}
 
-  \usepackage{background}
-  \backgroundsetup{contents=\drafttext,
+  \backgroundsetup{contents=\drafttext,%
              color=draftwatermarkcolor,
-             opacity=1,
-             angle=90,
-             position=current page.west,
-             vshift=-0.5\leftmargin,
-             hshift=0.3\textheight,
-             scale=2
-  }
-  \pagenumbering{arabic}
+           opacity=1,%
+           angle=90,%
+           position=current page.west,%
+           vshift=\pb@vshift,%
+           hshift=\pb@hshift,%
+           scale=\pb@scale%
+  }%
+  \pagenumbering{arabic}%
 }
+\makeatother

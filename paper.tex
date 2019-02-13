@@ -26,9 +26,19 @@
 
 % This is the custom command (defined in draft.tex above)
 % that adds a draft stamp on the PDF.
+%
+% \draft command parameters:
+%   * Positional argument
+%     - `long': use \draft{long} to have the long format for the commit info,
+%               i.e. date and time.
+%   * Optional arguments
+%     - `vshift': parameter passed to \backgroundsetup command
+%     - `hsfhift': parameter passed to \backgroundsetup command
+%     - `scale': parameter passed to \backgroundsetup command
+% see:
+% https://ctan.org/pkg/background
+% for the documentation of the `background' package.
 \draft
-% Use \draft{long} to have the long format for the commit
-% info, i.e. date and time.
 
 \begin{document}
 
