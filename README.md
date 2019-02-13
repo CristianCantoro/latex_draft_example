@@ -13,7 +13,7 @@ Just do this:
 \input{imports/draft.tex}
 ```
 
-More info on [my blog](https://balist.es/blog/2017/01/26/git-latex-gitinfo-draft-watermark/).
+More info on [my blog](https://balist.es/blog/2017/01/27/git-latex-gitinfo-draft-watermark/).
 
 ### Setup
 
