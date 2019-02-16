@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 # Copyright 2015 Brent Longborough
 # Part of gitinfo2 package Version 2
 # Release 2.0.7 2015-11-22
@@ -6,10 +6,31 @@
 # -----------------------------------------------------
 # Post-{commit,checkout,merge} hook for the gitinfo2 package
 #
-# Get the first tag found in the history from the current HEAD
-FIRSTTAG=$(git describe --tags --always --dirty='-*' 2>/dev/null)
-# Get the first tag in history that looks like a Release
-RELTAG=$(git describe --tags --long --always --dirty='-*' --match '[0-9]*.*' 2>/dev/null)
+
+## TODO: this works with git 2.20.1, we should find out which is the
+## minimum version required
+if git describe --tags "$(git rev-list --tags --max-count=1)" &>/dev/null; then
+    # we found at least a tag
+
+    # Get the first tag found in the history from the current HEAD
+    FIRSTTAG=$(git describe --tags --always --dirty='-*' 2>/dev/null)
+    # Get the first tag in history that looks like a Release
+    RELTAG=$(git describe --tags --long --always --dirty='-*' --match '[0-9]*.*' 2>/dev/null)
+else
+    # we did not find any tags
+    COMMITCOUNT=$(git rev-list --count HEAD)
+    COMMITHASH=$(git describe --tags --long --always --dirty='-*')
+
+    DIRTY=''
+    if [[ "$(git status --porcelain 2>/dev/null)" = *\?\?* ]]; then
+        DIRTY+='-*'
+    fi
+
+    FIRSTTAG="$COMMITCOUNT$DIRTY"
+    RELTAG="$COMMITCOUNT-0-$COMMITHASH"
+fi
+
+
 # Hoover up the metadata
 git --no-pager log -1 --date=short --decorate=short \
     --pretty=format:"\usepackage[%
