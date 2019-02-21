@@ -14,11 +14,12 @@
 % How to create a command with key values?
 % https://tex.stackexchange.com/a/34314/25748
 % ========= KEY DEFINITIONS =========
+\define@key{draft}{position}{\def\pb@position{#1}}
 \define@key{draft}{vshift}{\def\pb@vshift{#1}}
 \define@key{draft}{hshift}{\def\pb@hshift{#1}}
 \define@key{draft}{scale}{\def\pb@scale{#1}}
 % ========= KEY DEFAULTS =========
-\setkeys{draft}{vshift=-0.5\leftmargin,hshift=0.3\textheight,scale=2}%
+\setkeys{draft}{position=current page.west,vshift=-0.5\leftmargin,hshift=0,scale=2}%
 \newcommand{\draft}[2][]{%
   \global\toggletrue{isDraft}%
 
@@ -58,10 +59,10 @@
   \newcommand{\drafttext}{DRAFT (v. \gitIfIsDirtyRepoSymbol\gitAbbrevHash, \gitAuthor, \gitRelInfo, \gitCommitterDateDisplay) ~\today ~\currenttime}
 
   \backgroundsetup{contents=\drafttext,%
-             color=draftwatermarkcolor,
+           color=draftwatermarkcolor,
            opacity=1,%
            angle=90,%
-           position=current page.west,%
+           position=\pb@position,%
            vshift=\pb@vshift,%
            hshift=\pb@hshift,%
            scale=\pb@scale%
