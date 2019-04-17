@@ -15,7 +15,13 @@ if git describe --tags "$(git rev-list --tags --max-count=1)" &>/dev/null; then
     # Get the first tag found in the history from the current HEAD
     FIRSTTAG=$(git describe --tags --always --dirty='-*' 2>/dev/null)
     # Get the first tag in history that looks like a Release
-    RELTAG=$(git describe --tags --long --always --dirty='-*' --match '[0-9]*.*' 2>/dev/null)
+    RELTAG=$(git describe --tags \
+                          --long \
+                          --always \
+                          --dirty='-*' \
+                          --match '[0-9]*.*' \
+                          --match 'v[0-9]*.*' \
+                            2>/dev/null)
 else
     # we did not find any tags
     COMMITCOUNT=$(git rev-list --count HEAD)
