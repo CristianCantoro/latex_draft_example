@@ -1,12 +1,8 @@
 %!TEX root =../paper.tex
 
 % Required packages
-\usepackage[dirty=DirtyRepo]{gitinfo2}
 \usepackage{etoolbox}
 \usepackage{keyval}
-\usepackage{xstring}
-\usepackage{background}
-\usepackage[yyyymmdd,hhmmss]{datetime}
 
 \global\newtoggle{isDraft}
 
@@ -18,9 +14,14 @@
 \define@key{draft}{vshift}{\def\pb@vshift{#1}}
 \define@key{draft}{hshift}{\def\pb@hshift{#1}}
 \define@key{draft}{scale}{\def\pb@scale{#1}}
+\define@key{draft}{show}{\def\pb@show{#1}}
 % ========= KEY DEFAULTS =========
-\setkeys{draft}{position=current page.west,vshift=0.6\oddsidemargin,hshift=0.3\textheight,scale=2}%
+\setkeys{draft}{position=current page.west,vshift=0.6\oddsidemargin,hshift=0.3\textheight,scale=2,show=true}%
 \newcommand{\draft}[2][]{%
+  \usepackage[dirty=DirtyRepo]{gitinfo2}
+  \usepackage{xstring}
+  \usepackage[yyyymmdd,hhmmss]{datetime}
+
   \global\toggletrue{isDraft}%
 
   % Set new keys
@@ -58,15 +59,21 @@
   % watermark text
   \newcommand{\drafttext}{DRAFT (v. \gitIfIsDirtyRepoSymbol\gitAbbrevHash, \gitAuthor, \gitRelInfo, \gitCommitterDateDisplay) ~\today ~\currenttime}
 
-  \backgroundsetup{contents=\drafttext,%
-           color=draftwatermarkcolor,
-           opacity=1,%
-           angle=90,%
-           position=\pb@position,%
-           vshift=\pb@vshift,%
-           hshift=\pb@hshift,%
-           scale=\pb@scale%
-  }%
-  \pagenumbering{arabic}%
+  \ifthenelse{\equal{#2}{hide}}{%
+    % hide
+  }{%
+    % show
+    \usepackage{background}
+    \backgroundsetup{contents=\drafttext,%
+             color=draftwatermarkcolor,
+             opacity=1,%
+             angle=90,%
+             position=\pb@position,%
+             vshift=\pb@vshift,%
+             hshift=\pb@hshift,%
+             scale=\pb@scale%
+    }%
+    \pagenumbering{arabic}%
+  }
 }
 \makeatother
