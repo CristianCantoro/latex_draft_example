@@ -9,9 +9,9 @@
 # Get the base directory of the repository
 repo_basedir=$(git rev-parse --show-toplevel)
 
-## TODO: this works with git 2.20.1, we should find out which is the
+## TODO: this works with git 1.9.3, we should find out which is the
 ## minimum version required
-if git describe --tags "$(git rev-list --tags --max-count=1)" &>/dev/null; then
+if git describe --tags "$(git rev-list --tags --max-count=1 2> /dev/null)" &>/dev/null; then
     # we found at least a tag
 
     # Get the first tag found in the history from the current HEAD
