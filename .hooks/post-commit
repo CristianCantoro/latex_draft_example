@@ -6,6 +6,7 @@
 # -----------------------------------------------------
 # Post-{commit,checkout,merge} hook for the gitinfo2 package
 #
+repo_basedir=$(git rev-parse --show-toplevel)
 
 ## TODO: this works with git 1.9.3, we should find out which is the
 ## minimum version required
@@ -55,4 +56,4 @@ git --no-pager log -1 --date=short --decorate=short \
         refnames={%d},
         firsttagdescribe={$FIRSTTAG},
         reltag={$RELTAG}
-    ]{gitexinfo}" HEAD > .git/gitHeadInfo.gin
+    ]{gitexinfo}" HEAD > "${repo_basedir}/.git/gitHeadInfo.gin"
